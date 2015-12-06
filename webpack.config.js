@@ -12,11 +12,11 @@ fs.readdirSync('node_modules')
   });
 
 module.exports = {
-  entry: './src/server.ts',
+  entry: {server: './src/server.ts', client: './src/client.ts'},
   target: 'node',
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'server.js'
+    filename: '[name].bundle.js'
   },
   externals: nodeModules,
   resolve: {
@@ -27,5 +27,10 @@ module.exports = {
       { test: /\.tsx?$/, loader: 'ts-loader' },
       { test: /\.json?$/, loader: 'json' } 
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {NODE_ENV: '"production"'}
+    })
+  ]
 };
